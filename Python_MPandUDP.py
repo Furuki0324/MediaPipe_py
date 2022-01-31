@@ -8,9 +8,9 @@ serv_address = ("127.0.0.1", 50001)
 serv_address2 = ("127.0.0.1", 50002)
 sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 detector = TrackingModule.HandDetector(detectionCon=0.7, trackCon=0.3)
-pose = TrackingModule.PoseDetector(modelComplexity = 0, detectionCon=0.7, trackCon=0.3)
+pose = TrackingModule.PoseDetector(modelComplexity = 0, detectionCon=0.7, trackCon=0.5)
 
 tracking = False
 shoot = False
@@ -20,13 +20,18 @@ while True:
     #Flip the image.
     img = cv2.flip(img,1)
 
-    img, handNum = detector.findHands(img)
-    list = []
+    #img, handNum = detector.findHands(img)
+    #list = []
 
-    """
+    
     img = pose.findBody(img)
-    landmarks = pose.findPosePosition(img)
-    print(landmarks)
+    success, landmarks = pose.findPosePosition(img)
+    if(success):
+        print(landmarks)
+        message = str(landmarks)
+        sock.sendto(message.encode(), serv_address)
+
+
     """
 
     for num in range(handNum):
@@ -83,7 +88,8 @@ while True:
             #sock.sendto("Shoot".encode(), serv_address)
             shoot = False
     #print(tracking)
-    
+    """
+
     cv2.imshow("Img", img)
     cv2.waitKey(1)
 

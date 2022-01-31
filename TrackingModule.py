@@ -81,13 +81,17 @@ class PoseDetector():
         return img
 
     def findPosePosition(self, img):
+        success = False
         landmarks = []
         height, width, channel = img.shape
 
-        for id, lm in enumerate(self.result.pose_landmarks.landmark):
-            cx, cy, cz = lm.x * width, lm.y * height, lm.z
 
-            landmarks.append([id, cx, cy, cz])
+        if self.result.pose_landmarks:
+            success = True
+            for id, lm in enumerate(self.result.pose_landmarks.landmark):
+                cx, cy, cz = round(lm.x, 2), round(lm.y,2), round(lm.z,2)
 
-        return landmarks
+                landmarks.append([id, cx, cy, cz])
+
+        return success, landmarks
         
