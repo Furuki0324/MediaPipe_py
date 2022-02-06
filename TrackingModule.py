@@ -66,7 +66,7 @@ class PoseDetector():
 
     def findBody(self, img, draw = True):
 
-        img.flags.writeable = False      #こうするとパフォーマンスが向上するらしい
+        img.flags.writeable = False      #こうするとパフォーマンスが向上するらしい（Mediapipeのページより）
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         self.result = self.pose.process(img)
 
